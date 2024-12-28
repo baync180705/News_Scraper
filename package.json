@@ -2,5 +2,6 @@
   "dependencies": {
     "cheerio": "^1.0.0",
     "puppeteer": "^23.11.1"
-  }
+  },
+  "type": "module"
 }

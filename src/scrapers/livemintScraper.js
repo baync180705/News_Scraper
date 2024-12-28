@@ -1,19 +1,17 @@
-const cheerio = require("cheerio");
-const fs = require("fs");
-const {fetchDomContent} = require("../fetchDomContent")
-const URL = "https://www.livemint.com/news/himachal-weather-1-000-vehic700-tourists-to-safe-places-as-heavy-snowfall-hits-manali-imd-issues-severe-coldwave-alert-11735005905364.html";
+import * as fs from "fs"
+import * as cheerio from "cheerio";
 const BASE_URL = "https://www.livemint.com";
 
-const parseLivemintPage = async () => {
+export const parseLivemintPage = async (URL) => {
     try{
         console.log('Parsing the html page using cheerio');
 
-        const htmlContent = fs.readFileSync(`../../docs/livemint.html`, "utf-8");
+        const htmlContent = fs.readFileSync(`../docs/livemint.html`, "utf-8");
 
         const $ = cheerio.load(htmlContent);
         const $meta = $('.midSec.ga-tracking')
 
-        const endpoint = $meta.attr('data-weburl')
+        const endpoint = $meta.attr('data-weburl') || URL
         const tags = $meta.attr('data-keyword').split(",")       
         const heading = $('#article-0').text();
         const subHead = $('.storyPage_summary__Ge5SX').text();
@@ -28,10 +26,3 @@ const parseLivemintPage = async () => {
         console.log(`ERROR: ${err}`);
     }
 }
-
-const orchestrateFlow = async () => {
-    await fetchDomContent(URL, "livemint");
-    await parseLivemintPage();
-}
-
-orchestrateFlow()

@@ -1,14 +1,12 @@
-const cheerio = require("cheerio");
-const fs = require("fs");
-const {fetchDomContent} = require("../fetchDomContent")
-const URL = "https://timesofindia.indiatimes.com/world/rest-of-world/hong-kong-police-issue-arrest-warrants-and-bounties-for-six-activists/articleshow/116626079.cms";
+import * as fs from "fs"
+import * as cheerio from "cheerio";
 const BASE_URL = "https://timesofindia.indiatimes.com"
 
-const ParseToiPage = async () => {
+export const parseToiPage = async () => {
     try{
         console.log('Parsing the html page using cheerio');
 
-        const htmlContent = fs.readFileSync(`../../docs/toi.html`, "utf-8");
+        const htmlContent = fs.readFileSync(`../docs/toi.html`, "utf-8");
 
         const $ = cheerio.load(htmlContent);
         const $titleLink = $('link[rel="canonical"]')
@@ -30,10 +28,3 @@ const ParseToiPage = async () => {
         console.log(`ERROR: ${err}`);
     }
 }
-
-const orchestrateFlow = async () => {
-    await fetchDomContent(URL, "toi");
-    await ParseToiPage();
-}
-
-orchestrateFlow()
